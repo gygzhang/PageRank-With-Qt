@@ -28,12 +28,16 @@ SOURCES += \
     edge.cpp \
     graphwidget.cpp \
     main.cpp \
-    node.cpp
+    node.cpp \
+    pagerank_thread.cpp \
+    text.cpp
 
 HEADERS += \
     edge.h \
     graphwidget.h \
-    node.h
+    node.h \
+    pagerank_thread.h \
+    text.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

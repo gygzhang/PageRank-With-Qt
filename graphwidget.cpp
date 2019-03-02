@@ -51,103 +51,206 @@
 #include "graphwidget.h"
 #include "edge.h"
 #include "node.h"
+#include"text.h"
 
+#include<QDebug>
+#include<QThread>
 #include <math.h>
 
 #include <QKeyEvent>
 #include <QRandomGenerator>
 
-//! [0]
-GraphWidget::GraphWidget(QWidget *parent)
+#define N 8
+int c = 1;
+
+GraphWidget::GraphWidget(QWidget *parent,QGraphicsScene *scene)
     : QGraphicsView(parent), timerId(0)
 {
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    //scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-    scene->setSceneRect(-200, -200, 400, 400);
+    scene = new QGraphicsScene(this);
+
+    //this->t = t;
+    //connect(this,SIGNAL(mysql(double*R)),this,SLOT(scaleNode(double*)));
+    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    scene->setSceneRect(-200, -100, 300, 300);
     setScene(scene);
     setCacheMode(CacheBackground);
-    //setViewportUpdateMode(BoundingRectViewportUpdate);
+    setViewportUpdateMode(BoundingRectViewportUpdate);
     setRenderHint(QPainter::Antialiasing);
     setTransformationAnchor(AnchorUnderMouse);
-    scale(qreal(2.4), qreal(1.6));
-    setMinimumSize(800, 600);
-    setWindowTitle(tr("Elastic Nodes"));
-//! [0]
+    scale(qreal(2), qreal(2));
+    setMinimumSize(1200, 800);
+    setWindowTitle(tr("PageRank Iteration"));
+    //scene->addEllipse(-300,-300,100,100);
 
-//! [1]
-    node1 = new Node(this);
-    node2 = new Node(this);
-    node3 = new Node(this);
-    node4 = new Node(this);
+    node1 = new Node(this,1);
+    node2 = new Node(this,2);
+    node3 = new Node(this,3);
+    node4 = new Node(this,4);
+    node5 = new Node(this,5);
+    node6 = new Node(this,6);
+    node7 = new Node(this,7);
+    centerNode = new Node(this,8);
+    double R[8];
+    for(int i =0;i<8;i++) R[i] = 0;
+    scene->addItem(new Text(this,0,R));
 
-    node6 = new Node(this);
-    node7 = new Node(this);
-    node5 = new Node(this);
-    centerNode = new Node(this);
-    //Node *node9 = new Node(this);
-    scene->addItem(node1);
-    scene->addItem(node2);
-    scene->addItem(node3);
-    scene->addItem(node4);
-    scene->addItem(node5);
-    scene->addItem(node6);
-    scene->addItem(node7);
-
-    scene->addItem(centerNode);
-   // scene->addItem(node9);
-    scene->addItem(new Edge(node1, node6));
-    scene->addItem(new Edge(node2, node1));
-    scene->addItem(new Edge(node1, centerNode));
-    scene->addItem(new Edge(node2, centerNode));
-    scene->addItem(new Edge(node3, centerNode));
-    scene->addItem(new Edge(node4, centerNode));
-    scene->addItem(new Edge(node5, centerNode));
-    scene->addItem(new Edge(node6, centerNode));
-    scene->addItem(new Edge(node7, centerNode));
-    scene->addItem(new Edge(node3, node4));
-    scene->addItem(new Edge(node4, node2));
-    scene->addItem(new Edge(node4, node5));
-    scene->addItem(new Edge(node6, node5));
-    scene->addItem(new Edge(node6, node7));
-    //scene->addItem(new Edge(centerNode, node6));
-    //scene->addItem(new Edge(centerNode, node5));
-   // scene->addItem(new Edge(node6, node5));
-    //scene->addItem(new Edge(node7, node4));
-    //scene->addItem(new Edge(node5, node7));
-    //scene->addItem(new Edge(node9, node8));
-
-    node1->setPos(-50, -50);
-    node2->setPos(0, -50);
-    node3->setPos(50, -50);
-    node4->setPos(-50, 0);
-    centerNode->setPos(0, 0);
-    node6->setPos(50, 0);
-    node7->setPos(-50, 50);
-    node5->setScale(qreal(1.8));
-    centerNode->setScale(qreal(2.2));
-    node1->setScale(qreal(1.5));
-    //node8->setPos(0, 50);
-    //node9->setPos(50, 50);
 }
-//! [1]
 
-//! [2]
+GraphWidget::~GraphWidget(){
+
+}
+
 void GraphWidget::itemMoved()
 {
     if (!timerId)
         timerId = startTimer(1000 / 25);
 }
-//! [2]
 
 
 
+void GraphWidget::scaleNode(double *R){
+    static int a =1;
+    scene()->addItem(new Text(this,a,R));
+    a++;
+    node1->setScale(qreal(qreal(20*R[0])));
 
-//! [3]
-//!
-//!
+    node2->setScale(qreal(qreal(20*R[1])));
+    //QThread::sleep(1);
+
+    node3->setScale(qreal(qreal(20*R[2])));
+    //QThread::sleep(1);
+
+    node4->setScale(qreal(qreal(20*R[3])));
+    //QThread::sleep(1);
+
+    node5->setScale(qreal(qreal(20*R[4])));
+    //QThread::sleep(1);
+
+    node6->setScale(qreal(qreal(20*R[5])));
+    //QThread::sleep(1);
+
+    node7->setScale(qreal(qreal(20*R[6])));
+    //QThread::sleep(1);
+
+    centerNode->setScale(qreal(20*R[7]));
+
+    //QGraphicsItem * t = new Text(this,a);
+
+    //qDebug()<<a<<"aaaa";
+
+
+
+    //scene()->addEllipse(-300,-300,100,100);
+    //scene()->addText("dieadai");
+    //scene()->addItem()
+//    qDebug()<<"R[0]:"<<R[0];
+//    qDebug()<<"R[1]:"<<R[1];
+//    qDebug()<<"R[2]:"<<R[2];
+//    qDebug()<<"R[3]:"<<R[3];
+//    qDebug()<<"R[4]:"<<R[4];
+//    qDebug()<<"R[5]:"<<R[5];
+//    qDebug()<<"R[6]:"<<R[6];
+//    qDebug()<<"R[7]:"<<R[7];
+    //qDebug()<<"R[8]:"<<R[0];
+
+    /*qreal s1 = centerNode->pos().x();
+    qreal s2 = centerNode->pos().y();
+    qDebug()<<"8("<<s1<<","<<s2<<")";
+
+    s1 = node1->pos().x();
+    s2 = node1->pos().y();
+    qDebug()<<"1("<<s1<<","<<s2<<")";
+
+    s1 = node2->pos().x();
+    s2 = node2->pos().y();
+    qDebug()<<"node2("<<s1<<","<<s2<<")";
+
+    s1 = node3->pos().x();
+    s2 = node3->pos().y();
+    qDebug()<<"node3("<<s1<<","<<s2<<")";
+
+    s1 = node4->pos().x();
+    s2 = node4->pos().y();
+    qDebug()<<"node4("<<s1<<","<<s2<<")";
+
+    s1 = node5->pos().x();
+    s2 = node5->pos().y();
+    qDebug()<<"node5("<<s1<<","<<s2<<")";
+
+    s1 = node6->pos().x();
+    s2 = node6->pos().y();
+    qDebug()<<"node6("<<s1<<","<<s2<<")";
+
+    s1 = node7->pos().x();
+    s2 = node7->pos().y();
+    qDebug()<<"node5("<<s1<<","<<s2<<")";*/
+
+}
+
+
+void GraphWidget::addNode(int count){
+    switch(count){
+    case 1:scene()->addItem(node1);
+        node1->setPos(-1,0);
+        break;
+    case 2:scene()->addItem(node2);
+        node2->setPos(8,8);
+        break;
+    case 3:scene()->addItem(node3);
+        node3->setPos(8,-36);
+        break;
+    case 4:scene()->addItem(node4);
+        node4->setPos(8,16);
+        break;
+    case 5:scene()->addItem(node5);
+        node2->setPos(55,47);
+        break;
+    case 6:scene()->addItem(node6);
+        node2->setPos(7,-24);
+        break;
+    case 7:scene()->addItem(node7);
+        node2->setPos(-8,-16);
+        break;
+    case 8:scene()->addItem(centerNode);
+        centerNode->setPos(-24,-16);
+        break;
+    case 9:scene()->addItem(new Edge(node1, node6));
+        break;
+    case 10:scene()->addItem(new Edge(node2, node1));
+        break;
+    case 11:scene()->addItem(new Edge(node1, centerNode));
+        break;
+    case 12:scene()->addItem(new Edge(node2, centerNode));
+        break;
+    case 13:scene()->addItem(new Edge(node3, centerNode));
+        break;
+    case 14:scene()->addItem(new Edge(node4, centerNode));
+        break;
+    case 15:scene()->addItem(new Edge(node5, centerNode));
+        break;
+    case 16:scene()->addItem(new Edge(node6, centerNode));
+        break;
+    case 17:scene()->addItem(new Edge(node7, centerNode));
+        break;
+    case 18:scene()->addItem(new Edge(node3, node4));
+        break;
+    case 19:scene()->addItem(new Edge(node4, node2));
+        break;
+    case 20:scene()->addItem(new Edge(node4, node5));
+        break;
+    case 21:scene()->addItem(new Edge(node6, node5));
+        break;
+    case 22:scene()->addItem(new Edge(node6, node7));
+        break;
+    case 23:scene()->addItem(new Edge(centerNode,node3));
+        break;
+
+
+    }
+}
 void GraphWidget::keyPressEvent(QKeyEvent *event)
 {
-    /*switch (event->key()) {
+    switch (event->key()) {
     case Qt::Key_Up:
         centerNode->moveBy(0, -20);
         break;
@@ -158,7 +261,8 @@ void GraphWidget::keyPressEvent(QKeyEvent *event)
         centerNode->moveBy(-20, 0);
         break;
     case Qt::Key_Right:
-        centerNode->moveBy(20, 0);
+        addNode(c);
+        c++;
         break;
     case Qt::Key_Plus:
         zoomIn();
@@ -172,7 +276,7 @@ void GraphWidget::keyPressEvent(QKeyEvent *event)
         break;
     //default:
        // QGraphicsView::keyPressEvent(event);
-    }*/
+    }
 }
 //! [3]
 
@@ -207,7 +311,7 @@ void GraphWidget::timerEvent(QTimerEvent *event)
 //! [5]
 void GraphWidget::wheelEvent(QWheelEvent *event)
 {
-    scaleView(pow((double)2, -event->delta() / 240.0));
+    //scaleView(pow((double)2, -event->delta() / 240.0));
 }
 //! [5]
 #endif
@@ -228,32 +332,30 @@ void GraphWidget::drawBackground(QPainter *painter, const QRectF &rect)
 
     // Fill
     QLinearGradient gradient(sceneRect.topLeft(), sceneRect.bottomRight());
-    gradient.setColorAt(0, Qt::white);
+    gradient.setColorAt(0, QColor("#feeeed"));
     gradient.setColorAt(1, Qt::lightGray);
     painter->fillRect(rect.intersected(sceneRect), gradient);
     painter->setBrush(Qt::NoBrush);
     painter->drawRect(sceneRect);
 
     // Text
-    QRectF textRect(sceneRect.left() + 4, sceneRect.top() + 4,
+    QRectF textRect(sceneRect.left()+0, sceneRect.top()-40,
                     sceneRect.width() - 4, sceneRect.height() - 4);
-    QString message(tr(""));
+    QString message(tr(" PageRank Iteration"));
 
     QFont font = painter->font();
     font.setBold(true);
-    font.setPointSize(28);
+    font.setPointSize(20);
     painter->setFont(font);
     painter->setPen(Qt::lightGray);
     painter->drawText(textRect.translated(2, 2), message);
     painter->setPen(Qt::black);
     painter->drawText(textRect, message);
 }
-//! [6]
 
-//! [7]
 void GraphWidget::scaleView(qreal scaleFactor)
 {
-    qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
+   qreal factor = transform().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
     if (factor < 0.07 || factor > 100)
         return;
 
@@ -272,6 +374,10 @@ void GraphWidget::shuffle()
 void GraphWidget::zoomIn()
 {
     scaleView(qreal(1.2));
+    //*PR = 5;
+    //PR = new double[8];
+    //*(PR+1)=5;
+    //emit valueChanged(PR);
 }
 
 void GraphWidget::zoomOut()

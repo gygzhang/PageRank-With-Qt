@@ -47,13 +47,16 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
+#pragma once
 #ifndef GRAPHWIDGET_H
 #define GRAPHWIDGET_H
 
+
 #include <QGraphicsView>
+#include<QThread>
 
 class Node;
+
 
 //! [0]
 class GraphWidget : public QGraphicsView
@@ -61,15 +64,35 @@ class GraphWidget : public QGraphicsView
     Q_OBJECT
 
 public:
-    GraphWidget(QWidget *parent = 0x0);
-
+    Node *centerNode;
+    Node *node1;
+    Node *node2;
+    Node *node3;
+    Node *node4;
+    Node *node5;
+    Node *node6;
+    Node *node7;
+    GraphWidget(QWidget *parent = 0x0,QGraphicsScene *scene=nullptr);
+    void addNode(int count);
     void itemMoved();
+    ~GraphWidget() override;
+
+signals:
+    void nodeChange1();
+    void nodeChange2();
+    void nodeChange3();
+    void nodeChange4();
+    void nodeChange5();
+    void nodeChange6();
+    void nodeChange7();
+    void nodeChangeCentral();
+    //void nodeChange1();
 
 public slots:
     void shuffle();
     void zoomIn();
     void zoomOut();
-
+    void scaleNode(double *r);
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
@@ -77,12 +100,14 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
 #endif
     void drawBackground(QPainter *painter, const QRectF &rect) override;
-
+    //void drawUpdate(QString text);
     void scaleView(qreal scaleFactor);
 
 private:
     int timerId;
-    Node *centerNode;
+
+
+
 };
 //! [0]
 

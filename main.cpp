@@ -49,20 +49,28 @@
 ****************************************************************************/
 
 #include "graphwidget.h"
+#include"pagerank_thread.h"
+#include"edge.h"
 
 #include <QApplication>
 #include <QTime>
 #include <QMainWindow>
+#include<QPushButton>
 
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    GraphWidget *widget = new GraphWidget;
+    GraphWidget *widget= new GraphWidget(0x0,nullptr);
 
     QMainWindow mainWindow;
+
     mainWindow.setCentralWidget(widget);
 
     mainWindow.show();
+    pagerank_thread t(widget);
+    t.start();
+
+
     return app.exec();
 }
